@@ -109,14 +109,14 @@ function Publish-ToCheckRun {
             text    = $ReportData
         }
     }
-    $Response = Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
-    $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
-    Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
-    Write-Output "Check Run URL"
-    Write-Output $CHECK_RUN_ID
-    Set-ActionOutput -Name check_run_id -Value $CHECK_RUN_ID
-    # Set-ActionOutput -Name check_run_url -Value https://github.com/$repoFullName/runs/$CHECK_RUN_ID
-    # Write-Output https://github.com/$repoFullName/runs/$CHECK_RUN_ID
+      Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
+#     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
+#     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
+#     Write-Output "Check Run URL"
+#     Write-Output $CHECK_RUN_ID
+#     Set-ActionOutput -Name check_run_id -Value $CHECK_RUN_ID
+#     # Set-ActionOutput -Name check_run_url -Value https://github.com/$repoFullName/runs/$CHECK_RUN_ID
+#     # Write-Output https://github.com/$repoFullName/runs/$CHECK_RUN_ID
 }
 
 
