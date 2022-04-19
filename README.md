@@ -37,9 +37,9 @@ This Action defines the following formal inputs.
 |**`directory`**  | true | Directory where lines of code needs to be calculated. 
 |**`github_token`** | true | Input the GITHUB TOKEN Or Personal Access Token you would like to use. Recommended to use GitHub auto generated token ${{ secrets.GITHUB_TOKEN }}
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run using a Check Run. 
-|**`patterns`**  | true | file patterns that need to be considered for calculation
-|**`exclude_directory`**  | true | directories that need to be excluded
-|**`exclude_file_types`**  | true | file types that need to be excluded
+|**`patterns`**  | false | file patterns that need to be considered for calculation
+|**`exclude_directory`**  | false | directories that need to be excluded
+|**`exclude_file_types`**  | false | file types that need to be excluded
 
 
 ### Outputs
