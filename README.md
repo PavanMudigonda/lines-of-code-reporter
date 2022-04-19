@@ -1,6 +1,6 @@
 # Lines of Code Reporter
 
-Calculates and publishes lines of code report in GitHub Actions as Checksuite.
+## Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 
 ### Note:- The scope of this project is limited to Calculating lines of code and publishing report.
 ###  If you like my Github Action, please **STAR ⭐** it.
