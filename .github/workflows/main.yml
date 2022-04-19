@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: use this action, with existing test results
-        uses: PavanMudigonda/lines-of-code-reporter@v0.0.4
+        uses: PavanMudigonda/lines-of-code-reporter@v0.0.5
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
