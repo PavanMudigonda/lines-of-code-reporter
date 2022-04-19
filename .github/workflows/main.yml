@@ -15,8 +15,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: use this action, with existing test results
-        uses: PavanMudigonda/lines-of-code-reporter@v0.0.6
+        uses: PavanMudigonda/lines-of-code-reporter@v0.0.7
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
+      - name: print output
+        run: | 
+          echo "lines"
+          echo $total_lines
+          echo "file"
+          echo $loc_report
+        
