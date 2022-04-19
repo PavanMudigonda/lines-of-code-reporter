@@ -35,7 +35,8 @@ $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
 mkdir $test_results_dir
 Write-ActionInfo $test_results_dir
-$script:loc_report_path = Join-Path $test_results_dir loc-results.md
+$script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
+$script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
 $script:directory = $inputs.directory
 $script:exclude_directory = $inputs.exclude_directory
@@ -47,10 +48,16 @@ function Build-Report
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
-    cloc $script:directory --md --out=$script:loc_report_path
-    ((Get-Content -path $loc_report_path -Raw) -replace 'cloc|github.com/AlDanial/cloc v 1.92', ' ') | Set-Content -Path $loc_report_path
-    ((Get-Content -path $loc_report_path -Raw) -replace '| T=', 'Time Taken') | Set-Content -Path $loc_report_path
-    ((Get-Content -path $loc_report_path -Raw) -replace 'cloc', 'Lines of Code') | Set-Content -Path $loc_report_path
+    cloc $script:directory --md --out=$script:loc_report_md_path
+    ((Get-Content -path $loc_report_md_path -Raw) -replace 'cloc|github.com/AlDanial/cloc v 1.92', ' ') | Set-Content -Path $loc_report_md_path
+    ((Get-Content -path $loc_report_md_path -Raw) -replace '| T=', 'Time Taken') | Set-Content -Path $loc_report_md_path
+    ((Get-Content -path $loc_report_md_path -Raw) -replace 'cloc', 'Lines of Code') | Set-Content -Path $loc_report_md_path
+    cloc $script:directory --json --out=$script:loc_report_json_path
+    $json=Get-Content -Raw -Path $loc_report_json_path | Out-String | ConvertFrom-Json
+    $total_lines = ($json.SUM).code
+    Write-Output $total_lines
+    Set-ActionOutput -Name total_lines -Value $total_lines
+    Set-ActionOutput -Name loc_report -Value $loc_report_md_path
 }
 
 function Publish-ToCheckRun {
@@ -113,7 +120,7 @@ if ($inputs.skip_check_run -ne $true)
 
         Build-Report
         
-        $locData = [System.IO.File]::ReadAllText($loc_report_path)
+        $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
