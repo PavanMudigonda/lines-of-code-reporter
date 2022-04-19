@@ -110,7 +110,7 @@ function Publish-ToCheckRun {
         }
     }
     $Response = Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
-    $CHECK_RUN_ID = $Response.InputFields | Where-Object { $_.name -like "* Content*" } | Select-Object Name, Value
+    $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
     Write-Output "Check Run URL"
     Write-Output $CHECK_RUN_ID
