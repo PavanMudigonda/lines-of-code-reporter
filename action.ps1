@@ -39,7 +39,7 @@ $script:loc_report_path = Join-Path $test_results_dir loc-results.md
 $script:skip_check_run = $inputs.skip_check_run
 $script:directory = $inputs.directory
 $script:exclude_directory = $inputs.exclude_directory
-$scrit:patterns = $inputs.patterns
+$script:patterns = $inputs.patterns
 $script:exclude_file_types = $inputs.exclude_file_types
 
 
