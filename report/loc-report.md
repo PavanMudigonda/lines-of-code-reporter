@@ -1,6 +1,5 @@
 
- |   T=0.05 s (320.3 files/s, 45886.4 lines/s)
---- | ---
+ --|   T=0.05 s (320.3 files/s, 45886.4 lines/s) --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
