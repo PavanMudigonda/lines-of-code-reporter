@@ -15,15 +15,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: use this action, with existing test results
+        id: lines-of-code-reporter
         uses: PavanMudigonda/lines-of-code-reporter@v0.0.10
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
+          
       - name: print output
+        shell: pwsh
         run: | 
-          echo "lines"
-          echo $total_lines
-          echo "file"
-          echo $loc_report
+          Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}'
         
