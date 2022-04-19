@@ -23,27 +23,25 @@ function splitListInput { $args[0] -split ',' | % { $_.Trim() } }
 function writeListInput { $args[0] | % { Write-ActionInfo "    - $_" } }
 
 $inputs = @{
-    coverage_report_name = Get-ActionInput coverage_report_name
-    coverage_report_title = Get-ActionInput coverage_report_title
-    coverage_results_path = Get-ActionInput coverage_results_path -Required
+    directory = Get-ActionInput directory -Required
     github_token       = Get-ActionInput github_token -Required
     skip_check_run     = Get-ActionInput skip_check_run
-    minimum_coverage   = Get-ActionInput minimum_coverage
-    fail_below_threshold = Get-ActionInput fail_below_threshold
-    publish_only_summary = Get-ActionInput publish_only_summary
+    patterns     = Get-ActionInput patterns
+    exclude_directory     = Get-ActionInput exclude_directory
+    exclude_file_types     = Get-ActionInput exclude_file_types
 }
 
 $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
 mkdir $test_results_dir
 Write-ActionInfo $test_results_dir
-$script:coverage_report_path = Join-Path $test_results_dir coverage-results.md
+$script:coverage_report_path = Join-Path $test_results_dir loc-results.md.md
 $script:publish_only_summary = $inputs.publish_only_summary
 $script:skip_check_run = $inputs.skip_check_run
 
-function Build-CoverageReport 
+function Build-Report 
 {
-    Write-ActionInfo "Building human-readable code-coverage report"
+    Write-ActionInfo "Building human-readable lines of code report"
     $script:coverage_report_name = $inputs.coverage_report_name
     $script:coverage_report_title = $inputs.coverage_report_title
     $script:coverage_results_path = $inputs.coverage_results_path
@@ -55,7 +53,7 @@ function Build-CoverageReport
         $script:coverage_report_title = $report_name
     }
 
-        $script:coverage_report_path = Join-Path $test_results_dir coverage-results.md
+        $script:coverage_report_path = Join-Path $test_results_dir loc-results.md.md
         & "$PSScriptRoot/jacoco-report/jacocoxml2md.ps1" -Verbose `
             -xmlFile $script:coverage_results_path `
             -mdFile $script:coverage_report_path -xslParams @{
@@ -64,28 +62,6 @@ function Build-CoverageReport
     
         & "$PSScriptRoot/jacoco-report/embedmissedlines.ps1" -mdFile $script:coverage_report_path
     
-}
-
-function Build-CoverageSummaryReport 
-{
-    Write-ActionInfo "Building human-readable code-coverage report"
-    $script:coverage_report_name = $inputs.coverage_report_name
-    $script:coverage_report_title = $inputs.coverage_report_title
-    $script:coverage_results_path = $inputs.coverage_results_path
-
-    if (-not $script:coverage_report_name) {
-        $script:coverage_report_name = "COVERAGE_RESULTS_$([datetime]::Now.ToString('yyyyMMdd_hhmmss'))"
-    }
-    if (-not $coverage_report_title) {
-        $script:coverage_report_title = $report_name
-    }
-
-    $script:coverage_report_path = Join-Path $test_results_dir coverage-results.md
-    & "$PSScriptRoot/jacoco-report/jacocoxmlsummary2md.ps1" -Verbose `
-        -xmlFile $script:coverage_results_path `
-        -mdFile $script:coverage_report_path -xslParams @{
-            reportTitle = $script:coverage_report_title
-        }
 }
 
 function Publish-ToCheckRun {
@@ -142,63 +118,27 @@ function Publish-ToCheckRun {
 
 Write-ActionInfo "Publishing Report to GH Workflow"    
 $coverage_results_path = $inputs.coverage_results_path
-if ($inputs.skip_check_run -ne $true -and $inputs.publish_only_summary -eq $true )
-    {
-        Build-CoverageSummaryReport
-        
-        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
-        
-        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
-    }
-elseif ($inputs.skip_check_run -ne $true -and $inputs.publish_only_summary -ne $true )
-    {
-        Build-CoverageReport
-        
-        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
-        
-        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
-    }
-elseif ($inputs.skip_check_run -eq $true -and $inputs.publish_only_summary -eq $true )
-    {
-    
-        Build-CoverageSummaryReport
-        
-    }
-else {
 
+if ($inputs.skip_check_run -ne $true)
+    {
+        Build-CoverageSummaryReport
+        
+        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
+        
+        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
+    }
+else
+    {
         Build-CoverageReport
         
+        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
+        
+        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
     }
-$coverageXmlData = Select-Xml -Path $coverage_results_path -XPath "/report/counter[@type='LINE']"
-$coveredLines = $coverageXmlData.Node.covered
-Write-Host "Covered Lines: $coveredLines"
-$missedLines = $coverageXmlData.Node.missed
-Write-Host "Missed Lines: $missedLines"
-if ($missedLines -eq 0) 
-    {
-    $coveragePercentage = 100
-    } 
-else 
-    {
-    $coveragePercentage = [math]::Round(100 - (($missedLines / $coveredLines) * 100))
-    }
-$coveragePercentageString = "$coveragePercentage%"
-Write-Output $coveragePercentageString
-Set-ActionOutput -Name coveragePercentage -Value $coveragePercentage
-$script:coverage_value = $coveragePercentage
-Set-ActionOutput -Name coverage_results_path -Value $coverage_results_path
-Set-ActionOutput -Name coverage_percentage -Value ($coveragePercentage)
-Set-ActionOutput -Name covered_lines -Value ($coveredLines)
-Set-ActionOutput -Name missed_lines -Value ($missedLines)
+
+Set-ActionOutput -Name loc_report -Value ($loc_report)
 Set-ActionOutput -Name total_lines -Value ($coveredLines+$missedLines)
 
-if ($inputs.fail_below_threshold -eq "true") {
-        Write-ActionInfo "  * fail_below_threshold: true"
-    }
-    
-if ($coverage_value -lt $inputs.minimum_coverage -and $inputs.fail_below_threshold -eq "true") {
-        $script:stepShouldFail = $true
-    }
 
 if ($stepShouldFail) {
     Write-ActionInfo "Thowing error as Code Coverage is less than "minimum_coverage" is not met and 'fail_below_threshold' was true."

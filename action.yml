@@ -2,28 +2,37 @@
 ## This is a SAMPLE metadata file for a GitHub Action.  For more info:
 ##    https://help.github.com/en/articles/metadata-syntax-for-github-actions
 
-name: jacoco-reporter
+name: lines-of-code-reporter
 author: Pavan Mudigonda
 description: |
-  Publishes JaCoCo format Coverage Report in GitHub Actions as Checksuite and enforces Code Coverage Quality Gate.
+  Calculates and publishes JaCoCo lines of code report in GitHub Actions as Checksuite.
 
 ## Here you describe your *formal* inputs -- those that are
 ## documented and can be displayed by the marketplace.
 ## You also use these to identify the *required* inputs.
 inputs:
 
-  coverage_results_path:
+  directory:
     description: |
       Path to the JaCoCo coverage results file which will be used to generate
       a report. The only coverage results format supported is the
       JaCoCo XML schema.
-    required: true
+    required: false
+    default: ./
 
-  output_level:
+  patterns:
     description: |
-      Optionally specify the level of output detail for the test results.
-      May be one of: `none`, `Minimal`, `normal`, `detailed`, `diagnostic`
-      The default is `normal`.
+      # Patterns in the format of a '.gitignore' file, separated by pipes.
+    required: false
+
+  exclude_directory:
+    description: |
+      # directories to be excluded.
+    required: false
+
+  exclude_file_types:
+    description: |
+      # directories to be excluded.
     required: false
 
   github_token:
@@ -40,57 +49,14 @@ inputs:
       and `gist_token` input parameters.
     required: false
 
-  coverage_paths:
-    description: |
-      Comma-separated list of one or more directories to scan for code 
-      coverage, relative to the root of the project. Will include all .ps1
-      and .psm1 files under these directories recursively.
-    required: false
-
-  coverage_report_name:
-    description: |
-      The name of the code coverage report object that will be attached
-      to the Workflow Run.  Defaults to the name
-      `COVERAGE_RESULTS_<datetime>` where `<datetime>` is in the form
-      `yyyyMMdd_hhmmss`.
-    required: false
-
-  coverage_report_title:
-    description: |
-      The title of the code coverage report that will be embedded in the
-      report itself, which defaults to the same as the
-      `code_coverage_report_name` input.
-    required: false
-
-  minimum_coverage:
-    description: 'Minimum allowed coverage percentage as an integer.'
-    required: false
-    
-  fail_below_threshold:
-    description: 'Fail the action when the minimum coverage was not met.'
-    required: false
-    
-  publish_only_summary:
-    description: |
-      If true, will skip attaching the Tests Result report to the 
-      Workflow Run using a Check Run. Useful if your report has 65k 
-      characters that is not accepted by Github REST and GraphQL APIs
-    required: false
-
 ## Here you describe your *formal* outputs.
 outputs:
-  
-  coverage_percentage:
-    description: Coverage Percentage
 
-  covered_lines:
-    description: Covered Lines
-
-  missed_lines:
-    description: Missed Lines
+  loc_report:
+    description: Output report in markdown
 
   total_lines:
-    description: Total Lines
+    description: Total Lines of Code
 
 branding:
   color: purple
