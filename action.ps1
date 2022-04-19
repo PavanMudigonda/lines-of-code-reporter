@@ -46,6 +46,7 @@ $script:exclude_file_types = $inputs.exclude_file_types
 function Build-Report 
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
+    npm install -g cloc
     cloc $script:directory --md --out=$script:loc_report_path
     ((Get-Content -path $loc_report_path -Raw) -replace 'cloc|github.com/AlDanial/cloc v 1.92', ' ') | Set-Content -Path $loc_report_path
     ((Get-Content -path $loc_report_path -Raw) -replace 'cloc', 'Lines of Code') | Set-Content -Path $loc_report_path
