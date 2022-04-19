@@ -20,7 +20,7 @@ jobs:
       # generates coverage-report.md and publishes as checkrun
       - name: JaCoCo Code Coverage Report
         id: lines-of-code_reporter
-        uses: PavanMudigonda/lines-of-code_reporter@v0.1
+        uses: PavanMudigonda/lines-of-code_reporter@v1.0
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
