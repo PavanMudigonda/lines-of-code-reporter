@@ -35,33 +35,20 @@ $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
 mkdir $test_results_dir
 Write-ActionInfo $test_results_dir
-$script:coverage_report_path = Join-Path $test_results_dir loc-results.md.md
-$script:publish_only_summary = $inputs.publish_only_summary
+$script:loc_report_path = Join-Path $test_results_dir loc-results.md
 $script:skip_check_run = $inputs.skip_check_run
+$script:directory = $inputs.directory
+$script:exclude_directory = $inputs.exclude_directory
+$scrit:patterns = $inputs.patterns
+$script:exclude_file_types = $inputs.exclude_file_types
+
 
 function Build-Report 
 {
-    Write-ActionInfo "Building human-readable lines of code report"
-    $script:coverage_report_name = $inputs.coverage_report_name
-    $script:coverage_report_title = $inputs.coverage_report_title
-    $script:coverage_results_path = $inputs.coverage_results_path
-
-    if (-not $script:coverage_report_name) {
-        $script:coverage_report_name = "COVERAGE_RESULTS_$([datetime]::Now.ToString('yyyyMMdd_hhmmss'))"
-    }
-    if (-not $coverage_report_title) {
-        $script:coverage_report_title = $report_name
-    }
-
-        $script:coverage_report_path = Join-Path $test_results_dir loc-results.md.md
-        & "$PSScriptRoot/jacoco-report/jacocoxml2md.ps1" -Verbose `
-            -xmlFile $script:coverage_results_path `
-            -mdFile $script:coverage_report_path -xslParams @{
-                reportTitle = $script:coverage_report_title
-            }
-    
-        & "$PSScriptRoot/jacoco-report/embedmissedlines.ps1" -mdFile $script:coverage_report_path
-    
+    Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
+    cloc $script:directory --md --out=$script:loc_report_path
+    ((Get-Content -path $loc_report_path -Raw) -replace 'cloc|github.com/AlDanial/cloc v 1.92', ' ') | Set-Content -Path $loc_report_path
+    ((Get-Content -path $loc_report_path -Raw) -replace 'cloc', 'Lines of Code') | Set-Content -Path $loc_report_path
 }
 
 function Publish-ToCheckRun {
@@ -117,28 +104,25 @@ function Publish-ToCheckRun {
 
 
 Write-ActionInfo "Publishing Report to GH Workflow"    
-$coverage_results_path = $inputs.coverage_results_path
 
 if ($inputs.skip_check_run -ne $true)
     {
-        Build-CoverageSummaryReport
+        Write-Output "generating report and publishing"
+
+        Build-Report
         
-        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
+        $locData = [System.IO.File]::ReadAllText($loc_report_path)
+
+        Set-Variable -Name "report_title" -Value "Lines of Code"
+
+        Set-Variable -Name "loc_report_name" -Value "Lines of Code"
         
-        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
+        Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
     }
 else
     {
-        Build-CoverageReport
-        
-        $coverageSummaryData = [System.IO.File]::ReadAllText($coverage_report_path)
-        
-        Publish-ToCheckRun -ReportData $coverageSummaryData -ReportName $coverage_report_name -ReportTitle $coverage_report_title
+        Write-Output "skipping"
     }
-
-Set-ActionOutput -Name loc_report -Value ($loc_report)
-Set-ActionOutput -Name total_lines -Value ($coveredLines+$missedLines)
-
 
 if ($stepShouldFail) {
     Write-ActionInfo "Thowing error as Code Coverage is less than "minimum_coverage" is not met and 'fail_below_threshold' was true."
