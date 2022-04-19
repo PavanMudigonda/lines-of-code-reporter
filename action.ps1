@@ -52,9 +52,7 @@ function Build-Report
     ((Get-Content -path $loc_report_md_path -Raw) -replace 'cloc|github.com/AlDanial/cloc v 1.92', ' ') | Set-Content -Path $loc_report_md_path
     ((Get-Content -path $loc_report_md_path -Raw) -replace 'cloc', 'Lines of Code') | Set-Content -Path $loc_report_md_path
     cloc $script:directory --json --out=$script:loc_report_json_path
-
-
-    $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json | Measure-Object "LINE_COVERED" -Sum).Sum
+    $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
     $total_lines = ($json.SUM).code
     Write-Output $total_lines
     Set-ActionOutput -Name total_lines -Value $total_lines
