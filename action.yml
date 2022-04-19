@@ -58,6 +58,15 @@ outputs:
   total_lines:
     description: Total Lines of Code
 
+  check_run_id:
+    description: check run id of the report
+
+  check_run_url:
+    description: check run url of the report
+    
+
+
+
 branding:
   color: purple
   icon: check-circle
