@@ -1,5 +1,5 @@
 
-cloc|github.com/AlDanial/cloc v 1.92  T=0.05 s (320.3 files/s, 45886.4 lines/s)
+ |   T=0.05 s (320.3 files/s, 45886.4 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
@@ -12,3 +12,5 @@ YAML|1|14|11|44
 CSV|1|1|0|11
 --------|--------|--------|--------|--------
 SUM:|15|144|419|1586
+
+
