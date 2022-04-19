@@ -52,13 +52,16 @@ This Action defines the following formal outputs.
 | **`total_lines`** | Total Code Lines output
 
 ### Sample Screenshot
-### Sample Repo 
 
-https://github.com/PavanMudigonda/jacoco-playground
+<img width="881" alt="image" src="https://user-images.githubusercontent.com/86745613/164104335-2aec8669-9d15-4fc4-9517-35b4b8ba1f30.png">
+
+
+<img width="1013" alt="image" src="https://user-images.githubusercontent.com/86745613/164104559-9a27a09d-6abc-4a6e-96d0-e2decd00dff2.png">
+
 
 ### Sample Github Actions workflow 
 
-https://github.com/PavanMudigonda/jacoco-playground/blob/main/.github/workflows/lines-of-code.yml
+https://github.com/PavanMudigonda/lines-of-code-reporter/blob/main/.github/workflows/main.yml
 
 
 ### PowerShell GitHub Action
