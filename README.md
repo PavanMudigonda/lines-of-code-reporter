@@ -17,13 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-      # generates coverage-report.md and publishes as checkrun
-      - name: JaCoCo Code Coverage Report
-        id: lines-of-code_reporter
-        uses: PavanMudigonda/lines-of-code_reporter@v1.0
+      - name: use this action, with existing test results
+        id: lines-of-code-reporter
+        uses: PavanMudigonda/lines-of-code-reporter@v1.1.3
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_check_run: false
+          
+      - name: print output
+        shell: pwsh
+        run: | 
+          Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}' 
                     
 ```
 
