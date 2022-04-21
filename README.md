@@ -24,8 +24,6 @@ jobs:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-<!--           exclude_lang: "YAML,JSON"
-          exclude_dir: ".github" -->
           
       - name: print output
         shell: pwsh
