@@ -26,8 +26,8 @@ $inputs = @{
     directory = Get-ActionInput directory -Required
     github_token       = Get-ActionInput github_token -Required
     skip_check_run     = Get-ActionInput skip_check_run
-    patterns     = Get-ActionInput patterns
-    exclude_directory     = Get-ActionInput exclude_directory
+    exclude_lang     = Get-ActionInput exclude_lang
+    exclude_dir     = Get-ActionInput exclude_dir
     exclude_file_types     = Get-ActionInput exclude_file_types
 }
 
@@ -39,8 +39,8 @@ $script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
 $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
 $script:directory = $inputs.directory
-$script:exclude_directory = $inputs.exclude_directory
-$script:patterns = $inputs.patterns
+$script:exclude_dir = $inputs.exclude_dir
+$script:exclude_lang = $inputs.exclude_lang
 $script:exclude_file_types = $inputs.exclude_file_types
 
 
@@ -48,11 +48,11 @@ function Build-Report
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
-    cloc $script:directory --md --out=$script:loc_report_md_path
+    cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$exclude_lang --exclude-dir=$exclude_dir
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', 'Lines of Code | ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
-    cloc $script:directory --json --out=$script:loc_report_json_path
+    cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$exclude_lang --exclude-dir=$exclude_dir
     $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
     $total_lines = ($json.SUM).code
     Set-ActionOutput -Name total_lines -Value $total_lines
