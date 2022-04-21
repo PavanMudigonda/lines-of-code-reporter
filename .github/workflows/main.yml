@@ -28,4 +28,14 @@ jobs:
         shell: pwsh
         run: | 
           Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
-          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}'        
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}'
+          
+
+      - name: use this action, with existing test results
+        uses: PavanMudigonda/markdown-reporter@v0.1
+        with:
+          markdown_path: README.md
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_name: readme please
+          report_title: README FILE
+          
