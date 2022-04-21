@@ -20,19 +20,14 @@ inputs:
     required: false
     default: ./
 
-  patterns:
-    description: |
-      # Patterns in the format of a '.gitignore' file, separated by pipes.
-    required: false
-
-  exclude_directory:
+  exclude_dir:
     description: |
       # directories to be excluded.
     required: false
 
-  exclude_file_types:
+  exclude_lang:
     description: |
-      # directories to be excluded.
+      # languages to be excluded.comma separated.
     required: false
 
   github_token:
