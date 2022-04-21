@@ -19,11 +19,13 @@ jobs:
     
       - name: use this action, with existing test results
         id: lines-of-code-reporter
-        uses: PavanMudigonda/lines-of-code-reporter@v1.2
+        uses: PavanMudigonda/lines-of-code-reporter@v1.2.1
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
+          exclude_lang: "YAML,JSON"
+          exclude_dir: ".github"
           
       - name: print output
         shell: pwsh
