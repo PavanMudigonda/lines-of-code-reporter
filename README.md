@@ -19,13 +19,13 @@ jobs:
     
       - name: use this action, with existing test results
         id: lines-of-code-reporter
-        uses: PavanMudigonda/lines-of-code-reporter@v1.2.2
+        uses: PavanMudigonda/lines-of-code-reporter@v1.2
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-          exclude_lang: "YAML,JSON"
-          exclude_dir: ".github"
+<!--           exclude_lang: "YAML,JSON"
+          exclude_dir: ".github" -->
           
       - name: print output
         shell: pwsh
@@ -45,10 +45,9 @@ This Action defines the following formal inputs.
 |**`directory`**  | true | Directory where lines of code needs to be calculated. 
 |**`github_token`** | true | Input the GITHUB TOKEN Or Personal Access Token you would like to use. Recommended to use GitHub auto generated token ${{ secrets.GITHUB_TOKEN }}
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run using a Check Run. 
-|**`patterns`**  | false | file patterns that need to be considered for calculation
-|**`exclude_directory`**  | false | directories that need to be excluded
-|**`exclude_file_types`**  | false | file types that need to be excluded
-
+<!-- |**`exclude_dir`**  | false | directories that need to be excluded
+|**`exclude_lang`**  | false | file types that need to be excluded
+ -->
 
 ### Outputs
 
