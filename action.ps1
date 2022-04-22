@@ -50,7 +50,7 @@ function Build-Report
     npm install -g cloc
     cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     $Content=Get-Content -path $loc_report_md_path -Raw
-    $Content.replace('cloc|github.com/AlDanial/cloc', 'Lines of Code | ') | Set-Content -Path $loc_report_md_path
+    $Content.replace('cloc|github.com/AlDanial/cloc', 'Lines of Code Report| ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
     cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
