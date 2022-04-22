@@ -49,17 +49,17 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
     
-    if ( (exclude_dir -ne '') -and (exclude_lang -ne '') )
+    if ( ($script:exclude_dir -ne '') -and ($script:exclude_lang -ne '') )
     {
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
         cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
-    elseif ((exclude_dir -eq '') -and (exclude_lang -eq '') )
+    elseif (($script:exclude_dir -eq '') -and ($script:exclude_lang -eq '') )
     {
         cloc $script:directory --md --out=$script:loc_report_md_path
         cloc $script:directory --json --out=$script:loc_report_json_path
     }
-    elseif ( (exclude_dir -eq '') -and (exclude_lang -ne '') )
+    elseif ( ($script:exclude_dir -eq '') -and ($script:exclude_lang -ne '') )
     {
     
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang
