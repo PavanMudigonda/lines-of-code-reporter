@@ -76,6 +76,7 @@ function Build-Report
     Get-Content -Path $loc_report_md_path
     $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
     $total_lines = ($json.SUM).code
+    $total_lines = '{0:N0}' -f $total_lines
     Set-ActionOutput -Name total_lines -Value $total_lines
     Set-ActionOutput -Name loc_report -Value $loc_report_md_path
     Write-Output $total_lines
