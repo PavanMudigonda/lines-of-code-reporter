@@ -50,9 +50,12 @@ outputs:
   loc_report:
     description: Output report in markdown
 
-  total_lines:
-    description: Total Lines of Code
+  total_lines_string:
+    description: Total Lines of Code String Comma Seperated
 
+  total_lines_int:
+    description: Total Lines of Code int
+    
   check_run_id:
     description: check run id of the report
 
