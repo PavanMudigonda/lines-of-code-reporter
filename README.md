@@ -54,7 +54,8 @@ This Action defines the following formal outputs.
 | Name | Description
 |-|-|
 | **`loc_report`** | Lines of Code Report output
-| **`total_lines`** | Total Code Lines output
+| **`total_lines_int`** | Total Code Lines output as int
+| **`total_lines_string`** | Total Code Lines output as int with comma seperation
 
 ### Sample Screenshot
 
