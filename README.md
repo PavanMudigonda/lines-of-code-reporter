@@ -24,8 +24,12 @@ jobs:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-          
-      - name: print output
+
+      # Publish Lines of Code Summary  # Optional
+     - name: Add Lines of Code Summary
+       run: echo "{{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: print output # Optional
         shell: pwsh
         run: | 
           Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
