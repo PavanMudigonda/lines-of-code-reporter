@@ -16,7 +16,7 @@ jobs:
 
       - name: use this action, with existing test results
         id: lines-of-code-reporter
-        uses: PavanMudigonda/lines-of-code-reporter@v1.2.2
+        uses: PavanMudigonda/lines-of-code-reporter@v1.3
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -32,4 +32,4 @@ jobs:
 
       # Publish Lines of Code Summary  # Optional
       - name: Add Lines of Code Summary
-        run: echo {{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }} >> $GITHUB_STEP_SUMMARY
+        run: echo "{{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
