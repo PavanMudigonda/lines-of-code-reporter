@@ -1,5 +1,5 @@
 name: test
-#1
+#2
 on:
   push:
   release:
