@@ -135,6 +135,8 @@ function Publish-ToCheckRun {
         }
     }
       Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
+      $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
+      Set-ActionOutput -Name lines-of-code-summary -Value $locData
 #     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
 #     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
 #     Write-Output "Check Run URL"
