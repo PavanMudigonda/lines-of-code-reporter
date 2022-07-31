@@ -32,14 +32,4 @@ jobs:
 
       # Publish Lines of Code Summary  # Optional
       - name: Add Lines of Code Summary
-        run: echo "{{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
-
-
-      - name: use this action, with existing test results
-        uses: PavanMudigonda/markdown-reporter@v0.1
-        with:
-          markdown_path: README.md
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_name: readme please
-          report_title: README FILE
-          
+        run: echo {{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }} >> $GITHUB_STEP_SUMMARY
