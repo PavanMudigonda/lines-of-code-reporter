@@ -18,7 +18,7 @@ jobs:
     steps:
     
       - name: use this action, with existing test results
-        id: lines-of-code-reporter
+        id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.3
         with:
           directory: ./
@@ -27,7 +27,7 @@ jobs:
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
-       run: echo "{{ steps.lines-of-code-reporter.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
+       run: echo "${{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
 
       - name: print output # Optional
         shell: pwsh
