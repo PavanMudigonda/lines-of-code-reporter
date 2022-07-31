@@ -32,4 +32,4 @@ jobs:
 
       # Publish Lines of Code Summary  # Optional
       - name: Add Lines of Code Summary
-        run: echo "{{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
+        run: echo "${{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
