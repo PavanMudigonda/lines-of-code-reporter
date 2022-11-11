@@ -85,7 +85,7 @@ function Build-Report
     Write-Output $total_lines
     Write-Output $loc_report
     $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
-    Set-ActionOutput -Name lines-of-code-summary -Value $locData
+    # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 }
 
 function Publish-ToCheckRun {
