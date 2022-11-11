@@ -157,7 +157,7 @@ if ($inputs.skip_check_run -ne $true)
         
         $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
         
-        Set-ActionOutput -Name lines-of-code-summary -Value $locData
+        # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 

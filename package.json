@@ -13,7 +13,5 @@
     "@actions/exec": "^1.0.4",
     "cloc": "^2.9.0"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
