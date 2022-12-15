@@ -14,20 +14,23 @@ inputs:
 
   directory:
     description: |
-      Path to the JaCoCo coverage results file which will be used to generate
-      a report. The only coverage results format supported is the
-      JaCoCo XML schema.
+      Path to the Directory where Calculation needs to run. Defaults to current folder.
     required: false
     default: ./
 
   exclude_dir:
     description: |
-      # directories to be excluded.
+      # directories to be excluded. Comma separated allowed currently
     required: false
 
   exclude_lang:
     description: |
-      # languages to be excluded.comma separated.
+      # languages to be excluded. Comma separated allowed currently. 
+    required: false
+
+  include_lang:
+    description: |
+      # languages to be included. Comma separated allowed currently.
     required: false
 
   github_token:
@@ -62,8 +65,6 @@ outputs:
   check_run_url:
     description: check run url of the report
     
-
-
 
 branding:
   color: purple
