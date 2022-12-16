@@ -57,14 +57,14 @@ function Build-Report
     else
     {
         Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang $script:exclude_lang --exclude-dir $script:exclude_dir --include-lang $script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang $script:exclude_lang --exclude-dir $script:exclude_dir --include-lang $script:include_lang    
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
-    $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
+    $json=Get-Content -Raw -Path $loc_report_json_path | Out-String | ConvertFrom-Json
     $total_lines = ($json.SUM).code
     $total_lines_int = ($json.SUM).code
     $total_lines_string = '{0:N0}' -f ($total_lines - 16)
@@ -151,7 +151,7 @@ if ($inputs.skip_check_run -ne $true)
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
-        Set-Variable -Name "loc_report_name" -Value "Lines of Code: $total_lines_string"
+        Set-Variable -Name "loc_report_name" -Value "Lines of Code"
         
         Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
     }

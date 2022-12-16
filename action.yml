@@ -26,14 +26,14 @@ inputs:
       Defaults to a dummy value to avoid errors
       Comma separated allowed currently. 
     required: false
-    default: ./dummy-folder-non-existent
+    default: ".git"
 
   exclude_lang:
     description: |
       languages to be excluded. 
       Comma separated allowed currently. 
     required: false
-    default: '.'
+    default: "."
 
   include_lang:
     description: |
@@ -62,7 +62,7 @@ outputs:
     description: Output report in markdown
 
   total_lines_string:
-    description: Total Lines of Code String Comma Seperated
+    description: Total Lines of Code String Comma Separated
 
   total_lines_int:
     description: Total Lines of Code int
