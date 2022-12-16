@@ -50,17 +50,17 @@ function Build-Report
     npm install -g cloc
     
 
-    IF ( $script:include_lang -eq $null || $script:include_lang -eq ""  )
+    IF ( $inputsinclude_lang -eq $null || $inputs.include_lang -eq "" || $inputs.include_lang -eq " "  )
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
+        cloc $inputs.directory --md --out=$inputs.loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
+        cloc $inputs.directory --json --out=$inputs.loc_report_json_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
     }
     else
     {
         Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
+        cloc $inputs.directory --md --out=$inputs.loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang
+        cloc $inputs.directory --json --out=$inputs.loc_report_json_path  --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
