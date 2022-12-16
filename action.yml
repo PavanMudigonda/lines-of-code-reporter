@@ -14,19 +14,21 @@ inputs:
 
   directory:
     description: |
-      Path to the Directory where Calculation needs to run. Defaults to current folder.
+      Path to the Directory where Calculation needs to run. Defaults to github workspace.
     required: false
-    default: ./
+    default: ${{ github.workspace }}
 
   exclude_dir:
     description: |
       # directories to be excluded. Comma separated allowed currently
     required: false
+    default: ./dummy-folder-non-existent
 
   exclude_lang:
     description: |
       # languages to be excluded. Comma separated allowed currently. 
     required: false
+    default: .
 
   include_lang:
     description: |
