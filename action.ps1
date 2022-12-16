@@ -40,35 +40,24 @@ $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
 $script:directory = $inputs.directory
 $script:exclude_dir = $inputs.exclude_dir
+$script:include_lang = $inputs.include_lang
 $script:exclude_lang = $inputs.exclude_lang
-$script:exclude_file_types = $inputs.exclude_file_types
-
 
 function Build-Report 
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
-    
-    if ( ($script:exclude_dir -ne '') -and ($script:exclude_lang -ne '') )
+
+
+    if ( ($script:include_dir -eq '') )
     {
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
         cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
-    elseif (($script:exclude_dir -eq '') -and ($script:exclude_lang -eq '') )
-    {
-        cloc $script:directory --md --out=$script:loc_report_md_path
-        cloc $script:directory --json --out=$script:loc_report_json_path
-    }
-    elseif ( ($script:exclude_dir -eq '') -and ($script:exclude_lang -ne '') )
-    {
-    
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang
-    }
     else
     {
-        cloc $script:directory --md --exclude-lang=$script:exclude_lang
-        cloc $script:directory --json --exclude-lang=$script:exclude_lang
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-dir=$script:include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-dir=$script:include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
@@ -78,6 +67,7 @@ function Build-Report
     $total_lines = ($json.SUM).code
     $total_lines_int = ($json.SUM).code
     $total_lines_string = '{0:N0}' -f ($total_lines - 16)
+    $script:total_lines_string = '{0:N0}' -f ($total_lines - 16)
     Set-ActionOutput -Name total_lines -Value $total_lines
     Set-ActionOutput -Name total_lines_int -Value ($total_lines_int - 16)
     Set-ActionOutput -Name total_lines_string -Value $total_lines_string
@@ -122,14 +112,14 @@ function Publish-ToCheckRun {
     Write-ActionInfo "Adding Check Run"
     $url = "https://api.github.com/repos/$repoFullName/check-runs"
     $hdr = @{
-        Accept = 'application/vnd.github.antiope-preview+json'
+        Accept = 'application/vnd.github+json'
         Authorization = "token $ghToken"
     }
     $bdy = @{
         name       = $reportName
         head_sha   = $ref
         status     = 'completed'
-        conclusion = 'neutral'
+        conclusion = 'success'
         output     = @{
             title   = $reportTitle
             summary = "This run completed at ``$([datetime]::Now)``"
@@ -161,8 +151,8 @@ if ($inputs.skip_check_run -ne $true)
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
-        Set-Variable -Name "loc_report_name" -Value "Lines of Code"
-        
+        Set-Variable -Name "loc_report_name" -Value "Lines of Code: $script:total_lines_string"
+
         Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
     }
 else
@@ -170,7 +160,3 @@ else
         Write-Output "skipping"
     }
 
-if ($stepShouldFail) {
-    Write-ActionInfo "Thowing error as Code Coverage is less than "minimum_coverage" is not met and 'fail_below_threshold' was true."
-    throw "Code Coverage is less than Minimum Code Coverage Required"
-}
