@@ -14,7 +14,7 @@ jobs:
 
       - name: use this action, with existing test results
         id: loc
-        uses: PavanMudigonda/lines-of-code-reporter@v1.4
+        uses: ./
         with:
           include_lang: "YAML"
 
