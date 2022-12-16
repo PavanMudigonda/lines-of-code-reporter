@@ -27,8 +27,8 @@ $inputs = @{
     github_token       = Get-ActionInput github_token -Required
     skip_check_run     = Get-ActionInput skip_check_run
     exclude_lang     = Get-ActionInput exclude_lang
+    include_lang     = Get-ActionInput include_lang
     exclude_dir     = Get-ActionInput exclude_dir
-    exclude_file_types     = Get-ActionInput exclude_file_types
 }
 
 $test_results_dir = Join-Path $PWD _TMP
@@ -40,13 +40,15 @@ $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
 $script:directory = $inputs.directory
 $script:exclude_dir = $inputs.exclude_dir
-$script:include_lang = $inputs.include_lang
 $script:exclude_lang = $inputs.exclude_lang
+$script:include_lang = $inputs.include_lang
 
-function Build-Report
+
+function Build-Report 
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
+    
 
     IF ( $script:include_lang -eq $null || $script:include_lang -eq ""  )
     {   
@@ -64,7 +66,7 @@ function Build-Report
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
-    $json=Get-Content -Raw -Path $loc_report_json_path | Out-String | ConvertFrom-Json
+    $json=Get-Content -Raw -Path $script:loc_report_json_path | Out-String | ConvertFrom-Json
     $total_lines = ($json.SUM).code
     $total_lines_int = ($json.SUM).code
     $total_lines_string = '{0:N0}' -f ($total_lines - 16)
@@ -119,7 +121,7 @@ function Publish-ToCheckRun {
         name       = $reportName
         head_sha   = $ref
         status     = 'completed'
-        conclusion = 'neutral'
+        conclusion = 'success'
         output     = @{
             title   = $reportTitle
             summary = "This run completed at ``$([datetime]::Now)``"
@@ -146,6 +148,8 @@ if ($inputs.skip_check_run -ne $true)
         Build-Report
         
         $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
+        
+        # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
