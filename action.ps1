@@ -52,14 +52,14 @@ function Build-Report
     if ( $inputs.include_lang -eq '' )
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude_lang $inputs.exclude_lang --exclude_dir $inputs.exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude_lang $inputs.exclude_lang --exclude_dir $inputs.exclude_dir
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir
     }
     else
     {
         Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude_lang $inputs.exclude_lang --exclude_dir $inputs.exclude_dir --include_lang $inputs.include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude_lang $inputs.exclude_lang --exclude_dir $inputs.exclude_dir --include_lang $inputs.include_lang    
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir --include-lang $inputs.include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir --include-lang $inputs.include_lang    
     }
 
     $Content=Get-Content -path $script:loc_report_md_path -Raw
