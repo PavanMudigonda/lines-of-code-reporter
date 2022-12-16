@@ -1,0 +1,35 @@
+name: test
+#3
+on:
+  push:
+  release:
+    types: published
+
+jobs:
+
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: use this action, with existing test results
+        id: loc
+        uses: PavanMudigonda/lines-of-code-reporter@v1.4
+        with:
+          directory: ./
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_check_run: false
+          exclude_lang: "JSON"
+          exclude_dir: ".github"
+          
+      - name: print output
+        shell: pwsh
+        run: | 
+          Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}'
+
+      # Publish Lines of Code Summary  # Optional
+      - name: Add Lines of Code Summary
+        run: echo "${{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
