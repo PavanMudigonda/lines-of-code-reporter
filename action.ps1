@@ -48,7 +48,7 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
 
-    if IF ([string]::IsNullOrWhitespace($script:include_lang))
+    IF ([string]::IsNullOrWhitespace($script:include_lang))
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
