@@ -1,0 +1,29 @@
+name: test
+#3
+on:
+  workflow_dispatch:
+
+jobs:
+
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: use this action, with existing test results
+        id: loc
+        uses: PavanMudigonda/lines-of-code-reporter@v1.4
+        with:
+          exclude_lang: "YAML"
+          
+      - name: print output
+        shell: pwsh
+        run: | 
+          Write-Host 'Total Lines of Code...:  ${{ steps.loc.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.loc.outputs.loc_report }}'
+          
+      # Publish Lines of Code Summary  # Optional
+      - name: Add Lines of Code Summary
+        run: echo "${{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
