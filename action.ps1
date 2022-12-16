@@ -48,7 +48,7 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
 
-    IF ([string]::IsNullOrWhitespace($script:include_lang))
+    IF ( $script:include_lang -eq $null || $script:include_lang -eq ""  )
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
@@ -119,7 +119,7 @@ function Publish-ToCheckRun {
         name       = $reportName
         head_sha   = $ref
         status     = 'completed'
-        conclusion = 'success'
+        conclusion = 'neutral'
         output     = @{
             title   = $reportTitle
             summary = "This run completed at ``$([datetime]::Now)``"
@@ -146,8 +146,6 @@ if ($inputs.skip_check_run -ne $true)
         Build-Report
         
         $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
-        
-        # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
@@ -159,9 +157,3 @@ else
     {
         Write-Output "skipping"
     }
-
-if ($stepShouldFail) {
-    Write-ActionInfo "Thowing error as Code Coverage is less than "minimum_coverage" is not met and 'fail_below_threshold' was true."
-    throw "Code Coverage is less than Minimum Code Coverage Required"
-
-}
