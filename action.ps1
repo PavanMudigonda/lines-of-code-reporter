@@ -49,11 +49,11 @@ function Build-Report
     npm install -g cloc
 
 
-    if ( $inputs.include_lang -eq '' )
+    if ( $script:include_lang -eq '' )
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang $script:exclude_lang --exclude-dir $script:exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang $script:exclude_lang --exclude-dir $script:exclude_dir
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
+        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
     else
     {
