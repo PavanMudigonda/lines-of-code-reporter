@@ -14,25 +14,30 @@ inputs:
 
   directory:
     description: |
-      Path to the Directory where Calculation needs to run. Defaults to github workspace.
+      Path to the Directory where Calculation needs to run. 
+      Defaults to github workspace.
+      Comma separated allowed currently. 
     required: false
     default: ${{ github.workspace }}
 
   exclude_dir:
     description: |
-      # directories to be excluded. Comma separated allowed currently
+      directories to be excluded. Comma separated allowed currently
+      Defaults to a dummy value to avoid errors
+      Comma separated allowed currently. 
     required: false
     default: ./dummy-folder-non-existent
 
   exclude_lang:
     description: |
-      # languages to be excluded. Comma separated allowed currently. 
+      languages to be excluded. 
+      Comma separated allowed currently. 
     required: false
-    default: .
+    default: '.'
 
   include_lang:
     description: |
-      # languages to be included. Comma separated allowed currently.
+      languages to be included. Comma separated allowed currently.
     required: false
 
   github_token:
@@ -49,7 +54,7 @@ inputs:
       want to produce a Gist-based report via the `gist_name`
       and `gist_token` input parameters.
     required: false
-
+    default: 'false'
 ## Here you describe your *formal* outputs.
 outputs:
 
