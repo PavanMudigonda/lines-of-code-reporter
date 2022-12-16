@@ -151,7 +151,7 @@ if ($inputs.skip_check_run -ne $true)
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
-        Set-Variable -Name "loc_report_name" -Value "Lines of Code"
+        Set-Variable -Name "loc_report_name" -Value "Lines of Code: $total_lines_string"
         
         Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
     }
