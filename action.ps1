@@ -50,14 +50,16 @@ function Build-Report
 
 
     if ( $inputs.include_lang -eq '' )
-    {
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
+    {   
+        Write-ActionInfo "Include Languages Input is BLANK"
+        cloc $script:directory --md --out $script:loc_report_md_path --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir
+        cloc $script:directory --json --out $script:loc_report_json_path  --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir
     }
     else
     {
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang    
+        Write-ActionInfo "Include Languages Input is NOT BLANK"
+        cloc $script:directory --md --out $script:loc_report_md_path --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir --include-lang $inputs.include_lang
+        cloc $script:directory --json --out $script:loc_report_json_path  --exclude-lang $inputs.exclude_lang --exclude-dir $inputs.exclude_dir --include-lang $inputs.include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
@@ -126,7 +128,7 @@ function Publish-ToCheckRun {
             text    = $ReportData
         }
     }
-      Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
+    Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
 #     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
 #     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
 #     Write-Output "Check Run URL"
