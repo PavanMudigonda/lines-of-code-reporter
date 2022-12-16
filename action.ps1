@@ -53,14 +53,14 @@ function Build-Report
     IF ( $inputsinclude_lang -eq $null || $inputs.include_lang -eq "" || $inputs.include_lang -eq " "  )
     {   
         Write-ActionInfo "Include Languages Input is BLANK"
-        cloc $inputs.directory --md --out=$inputs.loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
-        cloc $inputs.directory --json --out=$inputs.loc_report_json_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
+        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
     else
     {
         Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $inputs.directory --md --out=$inputs.loc_report_md_path --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang
-        cloc $inputs.directory --json --out=$inputs.loc_report_json_path  --exclude-lang=$inputs.exclude_lang --exclude-dir=$inputs.exclude_dir --include-lang=$inputs.include_lang    
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
@@ -128,7 +128,7 @@ function Publish-ToCheckRun {
             text    = $ReportData
         }
     }
-      Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
+    Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
 #     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
 #     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
 #     Write-Output "Check Run URL"
@@ -148,8 +148,6 @@ if ($inputs.skip_check_run -ne $true)
         Build-Report
         
         $locData = [System.IO.File]::ReadAllText($loc_report_md_path)
-        
-        # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
