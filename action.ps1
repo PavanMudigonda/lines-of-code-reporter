@@ -49,15 +49,15 @@ function Build-Report
     npm install -g cloc
 
 
-    if ( ($script:include_dir -eq '') )
+    if ( ($script:include_lang -eq '') )
     {
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
         cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
     else
     {
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-dir=$script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-dir=$script:include_lang    
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
     }
 
     $Content=Get-Content -path $loc_report_md_path -Raw
