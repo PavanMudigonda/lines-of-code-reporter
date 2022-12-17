@@ -49,20 +49,22 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
    
-     if ($null -ne $script:inlcude_lang){
-        Write-Output "It's not null" -Foreground Green
-        Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
-
-     }
-     else {
+   if ( $script:inlcude_lang -eq $null )
+    {
+        'The array is $null'
         Write-Output "It is null" -Foreground Yellow
         Write-ActionInfo "Include Languages Input is BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
-
-     }
+        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir        
+    }
+    if ( $script:inlcude_lang -ne $null )
+    {
+        'The array is not $null'
+        Write-Output "It's not null" -Foreground Green
+        Write-ActionInfo "Include Languages Input is NOT BLANK"
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang            
+    }
  
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
