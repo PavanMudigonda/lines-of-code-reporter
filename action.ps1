@@ -142,7 +142,6 @@ function Publish-ToCheckRun {
 #     Set-ActionOutput -Name check_run_id -Value $CHECK_RUN_ID
 #     # Set-ActionOutput -Name check_run_url -Value https://github.com/$repoFullName/runs/$CHECK_RUN_ID
 #     # Write-Output https://github.com/$repoFullName/runs/$CHECK_RUN_ID
-}
 
 
 Write-ActionInfo "Publishing Report to GH Workflow"    
