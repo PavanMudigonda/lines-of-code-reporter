@@ -48,21 +48,22 @@ function Build-Report
 {
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
-    
-
-    IF ( $script:include_lang -eq $null || $script:include_lang -eq "" || $script:include_lang -eq " "  )
-    {   
-        Write-ActionInfo "Include Languages Input is BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
-        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
-    }
-    else
-    {
+   
+     if ($null -ne $inputs.inlcude_lang){
+        Write-Output "It's not null" -Foreground Green
         Write-ActionInfo "Include Languages Input is NOT BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
         cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
-    }
 
+     }
+     else {
+        Write-Output "It is null" -Foreground Yellow
+        Write-ActionInfo "Include Languages Input is BLANK"
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
+        cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
+
+     }
+ 
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
@@ -117,7 +118,7 @@ function Publish-ToCheckRun {
         Write-ActionInfo "Adding Check Run"
         $url = "https://api.github.com/repos/$repoFullName/check-runs"
         $hdr = @{
-            Accept = 'application/vnd.github.antiope-preview+json'
+            Accept = 'application/vnd.github+json'
             Authorization = "token $ghToken"
         }
         $bdy = @{
