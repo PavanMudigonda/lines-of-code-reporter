@@ -49,7 +49,7 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
    
-     if ($null -ne $inputs.inlcude_lang){
+     if ($null -ne $script:inlcude_lang){
         Write-Output "It's not null" -Foreground Green
         Write-ActionInfo "Include Languages Input is NOT BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
