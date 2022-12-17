@@ -49,7 +49,7 @@ function Build-Report
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
    
-   if ( $script:include_lang -eq $null )
+   if ( $script:include_lang -eq "" )
     {
         'The array is $null'
         Write-Output "It is null" -Foreground Yellow
@@ -57,7 +57,7 @@ function Build-Report
         cloc $script:directory --md --out="$script:loc_report_md_path" --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
         cloc $script:directory --json --out="$script:loc_report_json_path" --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"        
     }
-    if ( $script:include_lang -ne $null )
+    if ( $script:include_lang -ne "" )
     {
         'The array is not $null'
         Write-Output "It's not null" -Foreground Green
