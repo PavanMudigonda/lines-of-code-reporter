@@ -54,7 +54,7 @@ inputs:
       want to produce a Gist-based report via the `gist_name`
       and `gist_token` input parameters.
     required: false
-    default: 'false'
+    default: false
 ## Here you describe your *formal* outputs.
 outputs:
 
