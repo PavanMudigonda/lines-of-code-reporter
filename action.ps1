@@ -80,8 +80,6 @@ function Build-Report
     # Set-ActionOutput -Name lines-of-code-summary -Value $locData
 }
 
-
----------------
 function Publish-ToCheckRun {
     param(
         [string]$reportData,
