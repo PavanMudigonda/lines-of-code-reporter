@@ -88,10 +88,10 @@ function Publish-ToCheckRun {
         [string]$reportTitle
     )
 
-    if ($env:GITHUB_EVENT_NAME -eq "workflow_dispatch") {
-        Write-Host "::notice title=Check Run Publishing Skipped::Check run publishing has been skipped as it is not possible to attach check runs to workflows triggered with 'workflow_dispatch'."
-    } else {
-        Write-ActionInfo "Publishing Report to GH Workflow"
+#     if ($env:GITHUB_EVENT_NAME -eq "workflow_dispatch") {
+#         Write-Host "::notice title=Check Run Publishing Skipped::Check run publishing has been skipped as it is not possible to attach check runs to workflows triggered with 'workflow_dispatch'."
+#     } else {
+#         Write-ActionInfo "Publishing Report to GH Workflow"
 
         $ghToken = $inputs.github_token
         $ctx = Get-ActionContext
@@ -134,7 +134,7 @@ function Publish-ToCheckRun {
         }
         Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
     }
-}
+# }
 
 #     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
 #     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
