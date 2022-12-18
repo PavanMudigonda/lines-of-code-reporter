@@ -25,6 +25,7 @@ jobs:
           include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
           exclude_lang: "PowerShell,Shell,Go"       #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
+          include_ext: "c,ps1,go,sh,ts,js"          #Optional # Comma Seperated
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
@@ -49,8 +50,9 @@ This Action defines the following formal inputs.
 |**`github_token`** | false | Input the GITHUB TOKEN Or Personal Access Token you would like to use. Recommended to use GitHub auto generated token ${{ secrets.GITHUB_TOKEN }}
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run using a Check Run. 
 |**`exclude_dir`**  | false | directories that need to be excluded, comma seperated, example ".github,node_modules,.gitignore"
-|**`exclude_lang`**  | false | languages types that need to be excluded, comma seperated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript"
+|**`exclude_lang`**  | false | languages types that need to be excluded, comma seperated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript". Please see alternative filter "include_ext" based on file extension.
 |**`include_lang`**  | false | languages types that need to be included, comma seperated. Scroll to "Languages Supported" section. example "JavaScript,PowerShell,TypeScript"
+|**`include_ext`**  | false | extention types that need to be included, comma seperated. Scroll to "Extensions Supported" section. example "c,sh,ts,js". See alternative filter "include_lang"
 
 ### Outputs
 
