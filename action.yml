@@ -39,7 +39,12 @@ inputs:
     description: |
       languages to be included. Comma separated allowed currently.
     required: false
-
+    
+  include_ext:
+    description: |
+      ext to be included. Comma separated allowed currently.
+    required: false
+    
   github_token:
     description: |
       GITHUB_TOKEN to authenticate against API calls to attach
