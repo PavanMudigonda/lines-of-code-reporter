@@ -46,23 +46,31 @@ $script:include_lang = $inputs.include_lang
 
 function Build-Report 
 {
+    $script:directory = $inputs.directory
+    $script:exclude_dir = $inputs.exclude_dir
+    $script:exclude_lang = $inputs.exclude_lang
+    $script:include_lang = $inputs.include_lang
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
-    
-
-    IF ( $inputsinclude_lang -eq $null || $inputs.include_lang -eq "" || $inputs.include_lang -eq " "  )
-    {   
+    Write-ActionInfo $script:include_lang
+   
+   if (-not $script:include_lang)
+    {
+        'The array is $null'
+        Write-Output "It is null" -Foreground Yellow
         Write-ActionInfo "Include Languages Input is BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
         cloc $script:directory --json --out=$script:loc_report_json_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir
     }
-    else
+    if($script:include_lang)
     {
+        'The array is not $null'
+        Write-Output "It's not null" -Foreground Green
         Write-ActionInfo "Include Languages Input is NOT BLANK"
         cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang    
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
     }
-
+ 
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
@@ -87,48 +95,54 @@ function Publish-ToCheckRun {
         [string]$reportTitle
     )
 
-    Write-ActionInfo "Publishing Report to GH Workflow"
+#     if ($env:GITHUB_EVENT_NAME -eq "workflow_dispatch") {
+#         Write-Host "::notice title=Check Run Publishing Skipped::Check run publishing has been skipped as it is not possible to attach check runs to workflows triggered with 'workflow_dispatch'."
+#     } else {
+#         Write-ActionInfo "Publishing Report to GH Workflow"
 
-    $ghToken = $inputs.github_token
-    $ctx = Get-ActionContext
-    $repo = Get-ActionRepo
-    $repoFullName = "$($repo.Owner)/$($repo.Repo)"
+        $ghToken = $inputs.github_token
+        $ctx = Get-ActionContext
+        $repo = Get-ActionRepo
+        $repoFullName = "$($repo.Owner)/$($repo.Repo)"
 
-    Write-ActionInfo "Resolving REF"
-    $ref = $ctx.Sha
-    if ($ctx.EventName -eq 'pull_request') {
-        Write-ActionInfo "Resolving PR REF"
-        $ref = $ctx.Payload.pull_request.head.sha
+        Write-ActionInfo "Resolving REF"
+        $ref = $ctx.Sha
+        if ($ctx.EventName -eq 'pull_request') {
+            Write-ActionInfo "Resolving PR REF"
+            $ref = $ctx.Payload.pull_request.head.sha
+            if (-not $ref) {
+                Write-ActionInfo "Resolving PR REF as AFTER"
+                $ref = $ctx.Payload.after
+            }
+        }
         if (-not $ref) {
-            Write-ActionInfo "Resolving PR REF as AFTER"
-            $ref = $ctx.Payload.after
+            Write-ActionError "Failed to resolve REF"
+            exit 1
         }
-    }
-    if (-not $ref) {
-        Write-ActionError "Failed to resolve REF"
-        exit 1
-    }
-    Write-ActionInfo "Resolved REF as $ref"
-    Write-ActionInfo "Resolve Repo Full Name as $repoFullName"
+        Write-ActionInfo "Resolved REF as $ref"
+        Write-ActionInfo "Resolve Repo Full Name as $repoFullName"
 
-    Write-ActionInfo "Adding Check Run"
-    $url = "https://api.github.com/repos/$repoFullName/check-runs"
-    $hdr = @{
-        Accept = 'application/vnd.github+json'
-        Authorization = "token $ghToken"
-    }
-    $bdy = @{
-        name       = $reportName
-        head_sha   = $ref
-        status     = 'completed'
-        conclusion = 'success'
-        output     = @{
-            title   = $reportTitle
-            summary = "This run completed at ``$([datetime]::Now)``"
-            text    = $ReportData
+        Write-ActionInfo "Adding Check Run"
+        $url = "https://api.github.com/repos/$repoFullName/check-runs"
+        $hdr = @{
+            Accept = 'application/vnd.github+json'
+            Authorization = "token $ghToken"
         }
+        $bdy = @{
+            name       = $reportName
+            head_sha   = $ref
+            status     = 'completed'
+            conclusion = 'success'
+            output     = @{
+                title   = $reportTitle
+                summary = "This run completed at ``$([datetime]::Now)``"
+                text    = $reportData
+            }
+        }
+        Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
     }
-    Invoke-WebRequest -Headers $hdr $url -Method Post -Body ($bdy | ConvertTo-Json)
+# }
+
 #     $CHECK_RUN_ID = $Response.Content | Where-Object { $_.name -like "* id*" } | Select-Object Name, Value
 #     Set-ActionOutput -Name total_lines -Value $CHECK_RUN_ID
 #     Write-Output "Check Run URL"
@@ -136,7 +150,6 @@ function Publish-ToCheckRun {
 #     Set-ActionOutput -Name check_run_id -Value $CHECK_RUN_ID
 #     # Set-ActionOutput -Name check_run_url -Value https://github.com/$repoFullName/runs/$CHECK_RUN_ID
 #     # Write-Output https://github.com/$repoFullName/runs/$CHECK_RUN_ID
-}
 
 
 Write-ActionInfo "Publishing Report to GH Workflow"    
