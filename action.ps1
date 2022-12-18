@@ -31,6 +31,8 @@ $inputs = @{
     exclude_dir     = Get-ActionInput exclude_dir
 }
 
+function removeSpace { $args[0].Replace(' ','') }
+
 $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
 mkdir $test_results_dir
@@ -38,18 +40,18 @@ Write-ActionInfo $test_results_dir
 $script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
 $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
-$script:directory = $inputs.directory
-$script:exclude_dir = $inputs.exclude_dir
-$script:exclude_lang = $inputs.exclude_lang
-$script:include_lang = $inputs.include_lang
+$script:directory =  $inputs.directory
+$script:exclude_dir = removeSpace $inputs.exclude_dir
+$script:exclude_lang = removeSpace $inputs.exclude_lang
+$script:include_lang = removeSpace $inputs.include_lang
 
 
 function Build-Report 
 {
     $script:directory = $inputs.directory
-    $script:exclude_dir = $inputs.exclude_dir
-    $script:exclude_lang = $inputs.exclude_lang
-    $script:include_lang = $inputs.include_lang
+    $script:exclude_dir = removeSpace $inputs.exclude_dir
+    $script:exclude_lang = removeSpace $inputs.exclude_lang
+    $script:include_lang = removeSpace $inputs.include_lang
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
     Write-ActionInfo $script:include_lang
