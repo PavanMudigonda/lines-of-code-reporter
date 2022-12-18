@@ -64,22 +64,22 @@ function Build-Report
     {
         Write-Output "Include lang is null" -Foreground Yellow
         Write-Output "Include ext is null" -Foreground Yellow
-        cloc "$script:directory" --vcs=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
-        cloc "$script:directory" --vcs=git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+        cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+        cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
     }
     if($script:include_lang -ne "" -and $script:include_ext -eq "")
     {
         Write-Output "Include lang not null" -Foreground Green
         Write-Output "Include ext is null" -Foreground Yellow
-        cloc "$script:directory" --vcs=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
-        cloc "$script:directory" --vcs=git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+        cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+        cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
     }
     if($script:include_lang -eq "" -and $script:include_ext -ne "")
     {
         Write-Output "Include lang is null" -Foreground Yellow
         Write-Output "Include ext is not null" -Foreground Green
-        cloc "$script:directory" --vcs=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
-        cloc "$script:directory" --vcs=git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+        cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+        cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
     }
     if($script:include_lang -ne "" -and $script:include_ext -ne "")
     {

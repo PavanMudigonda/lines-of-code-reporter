@@ -19,7 +19,7 @@ jobs:
     
       - name: Calculate Lines of Code
         id: loc
-        uses: PavanMudigonda/lines-of-code-reporter@v1.4
+        uses: PavanMudigonda/lines-of-code-reporter@v1.5
         with:
           directory: src
           include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
