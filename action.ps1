@@ -29,6 +29,7 @@ $inputs = @{
     exclude_lang     = Get-ActionInput exclude_lang
     include_lang     = Get-ActionInput include_lang
     exclude_dir     = Get-ActionInput exclude_dir
+    include_ext       = Get-ActionInput include_ext    
 }
 
 function removeSpace { $args[0].Replace(' ','') }
@@ -44,6 +45,7 @@ $script:directory =  $inputs.directory
 $script:exclude_dir = removeSpace $inputs.exclude_dir
 $script:exclude_lang = removeSpace $inputs.exclude_lang
 $script:include_lang = removeSpace $inputs.include_lang
+$script:include_ext = $inputs.include_ext
 
 
 function Build-Report 
@@ -52,27 +54,41 @@ function Build-Report
     $script:exclude_dir = removeSpace $inputs.exclude_dir
     $script:exclude_lang = removeSpace $inputs.exclude_lang
     $script:include_lang = removeSpace $inputs.include_lang
+    $script:include_ext = removeSpace $inputs.include_ext
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
     Write-ActionInfo $script:include_lang
-   
-   if (-not $script:include_lang)
+    Write-ActionInfo $script:include_ext
+    
+    if($script:include_lang -eq "" -and $script:include_ext -eq "")
     {
-        'The array is $null'
-        Write-Output "It is null" -Foreground Yellow
-        Write-ActionInfo "Include Languages Input is BLANK"
-        cloc "$script:directory" --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
-        cloc "$script:directory" --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+        Write-Output "Include lang is null" -Foreground Yellow
+        Write-Output "Include ext is null" -Foreground Yellow
+        cloc "$script:directory" --VSC=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+        cloc "$script:directory" --VSC=git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
     }
-    if($script:include_lang)
+    if($script:include_lang -ne "" -and $script:include_ext -eq "")
     {
-        'The array is not $null'
-        Write-Output "It's not null" -Foreground Green
-        Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc "$script:directory" --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
-        cloc "$script:directory" --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+        Write-Output "Include lang not null" -Foreground Green
+        Write-Output "Include ext is null" -Foreground Yellow
+        cloc "$script:directory" --VSC=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+        cloc "$script:directory" --VSC=git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
     }
- 
+    if($script:include_lang -eq "" -and $script:include_ext -ne "")
+    {
+        Write-Output "Include lang is null" -Foreground Yellow
+        Write-Output "Include ext is not null" -Foreground Green
+        cloc "$script:directory" --VSC=git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+        cloc "$script:directory" --VSC=git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+    }
+    if($script:include_lang -ne "" -and $script:include_ext -ne "")
+    {
+        Write-Output "Include lang not null" -Foreground Yellow
+        Write-Output "Include ext not null" -Foreground Yellow
+        Write-ActionInfo "Thowing error as both include_lang and include_ext were supplied to action which is not supported. Please use only of the option"
+        throw "Please use either include_lang or include_ext but not both together which is not supported"
+    }
+    
     $Content=Get-Content -path $loc_report_md_path -Raw
     $Content.replace('cloc|github.com/AlDanial/cloc', '   Lines of Code Report|    ') | Set-Content -Path $loc_report_md_path
     Get-Content -Path $loc_report_md_path
@@ -166,7 +182,7 @@ if ($inputs.skip_check_run -ne $true)
 
         Set-Variable -Name "report_title" -Value "Lines of Code"
 
-        Set-Variable -Name "loc_report_name" -Value "Lines of Code"
+        Set-Variable -Name "loc_report_name" -Value "Lines of Code $total_lines_string"
         
         Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
     }
