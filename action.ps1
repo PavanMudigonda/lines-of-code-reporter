@@ -85,8 +85,8 @@ function Build-Report
     {
         Write-Output "Include lang not null" -Foreground Yellow
         Write-Output "Include ext not null" -Foreground Yellow
-        cloc "$script:directory" --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang" --include-ext="$script:include_ext"
-        cloc "$script:directory" --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang" --include-ext="$script:include_ext"
+        Write-ActionInfo "Thowing error as both include_lang and include_ext were supplied to action which is not supported. Please use only of the option"
+        throw "Please use either include_lang or include_ext but not both together which is not supported"
     }
     
     $Content=Get-Content -path $loc_report_md_path -Raw
