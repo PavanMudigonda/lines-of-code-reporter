@@ -61,10 +61,10 @@ function Build-Report
     Write-ActionInfo $script:include_ext
     
     #Condition #1
-    if($script:include_lang -eq "" -and $script:include_ext -eq "")
+    if( ($script:include_lang -eq "") -and ($script:include_ext -eq "") )
     {
          # Condition 1.1
-        if($script:exclude_lang -ne "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -ne "") -and ($script:exclude_ext -eq "") )
         {
             Write-Output "Include lang is null" -Foreground Yellow
             Write-Output "Include ext is null" -Foreground Yellow
@@ -72,7 +72,7 @@ function Build-Report
             cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
         }
          # Condition 1.2
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -ne "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
         {
             Write-Output "Include lang is null" -Foreground Yellow
             Write-Output "Include ext is null" -Foreground Yellow
@@ -80,7 +80,7 @@ function Build-Report
             cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir"
         } 
          # Condition 1.3
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -eq ""))
         {
             Write-Output "Include lang is null" -Foreground Yellow
             Write-Output "Include ext is null" -Foreground Yellow
@@ -89,10 +89,10 @@ function Build-Report
         }         
     }
     #Condition #2
-    if($script:include_lang -ne "" -and $script:include_ext -eq "")
+    if(($script:include_lang -ne "") -and ($script:include_ext -eq ""))
     {
          # Condition 2.1
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -eq ""))
         {
             Write-Output "Include lang not null" -Foreground Green
             Write-Output "Include ext is null" -Foreground Yellow
@@ -102,7 +102,7 @@ function Build-Report
             cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
         }
          # Condition 2.2
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -ne "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
         {
             Write-Output "Include lang not null" -Foreground Green
             Write-Output "Include ext is null" -Foreground Yellow
@@ -112,7 +112,7 @@ function Build-Report
             cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
         }
          # Condition 2.3
-        if($script:exclude_lang -ne "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -ne "") -and ($script:exclude_ext -eq ""))
         {
             Write-Output "Include lang not null" -Foreground Green
             Write-Output "Include ext is null" -Foreground Yellow
@@ -123,10 +123,10 @@ function Build-Report
         }        
     }
     # Condition# 3
-    if($script:include_lang -eq "" -and $script:include_ext -ne "")
+    if(($script:include_lang -eq "") -and ($script:include_ext -ne ""))
     {
         # Condition 3.1
-        if($script:exclude_lang -ne "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -ne "") -and ($script:exclude_ext -eq ""))
         {
             Write-Output "Include lang is null" -Foreground Yellow
             Write-Output "Include ext is not null" -Foreground Green
@@ -134,7 +134,7 @@ function Build-Report
             cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
         }
          # Condition 3.2
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -ne "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
         {
             Write-Output "Exclude lang is not null" -Foreground Green
             Write-Output "Exclude ext is null" -Foreground Yellow
@@ -143,7 +143,7 @@ function Build-Report
 
         }
          # Condition 3.3
-        if($script:exclude_lang -eq "" -and $script:exclude_ext -eq "")
+        if(($script:exclude_lang -eq "") -and ($script:exclude_ext -eq ""))
         {
             Write-Output "Exclude lang is null" -Foreground Yellow
             Write-Output "Exclude ext is null" -Foreground Yellow
@@ -152,7 +152,7 @@ function Build-Report
         }
     }
     # Condition# 4
-    if($script:include_lang -ne "" -and $script:include_ext -ne "")
+    if(($script:include_lang -ne "") -and ($script:include_ext -ne ""))
     {
         Write-Output "Include lang not null" -Foreground Yellow
         Write-Output "Include ext not null" -Foreground Yellow
@@ -160,7 +160,7 @@ function Build-Report
         throw "Please use either include_lang or include_ext but not both together which is not supported"
     }
     # Condition# 5
-    if($script:exclude_lang -ne "" -and $script:exclude_ext -ne "")
+    if(($script:exclude_lang -ne "") -and ($script:exclude_ext -ne ""))
     {
         Write-Output "Exclude lang not null" -Foreground Yellow
         Write-Output "Exclude ext not null" -Foreground Yellow
