@@ -79,7 +79,14 @@ This Action is implemented as a [PowerShell GitHub Action](https://github.com/eb
 
 ## Languages Supported
 
-BAP                        (abap)
+</pre>
+[](1}}})
+<a name="Languages"></a> []({{{1)
+# [Recognized Languages &#9650;](#___top "click to go to top of document")
+
+<pre>
+
+ABAP                       (abap)
 ActionScript               (as)
 Ada                        (ada, adb, ads, pad)
 ADSO/IDSM                  (adso)
@@ -390,3 +397,4 @@ yacc                       (y, yacc)
 YAML                       (clang-format, clang-tidy, gemrc, glide.lock, mir, reek, rviz, sublime-syntax, syntax, yaml, yaml-tmlanguage, yml, yml.mysql)
 Zig                        (zig)
 zsh                        (zsh)
+</pre>
