@@ -16,7 +16,7 @@ jobs:
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.4
         with:
-          include_lang: "YAML"
+          include_lang: "YAML,JSON,PowerShell"
 
       - name: print output
         shell: pwsh
