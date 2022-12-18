@@ -67,8 +67,8 @@ function Build-Report
         'The array is not $null'
         Write-Output "It's not null" -Foreground Green
         Write-ActionInfo "Include Languages Input is NOT BLANK"
-        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
-        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang=$script:include_lang
+        cloc $script:directory --md --out=$script:loc_report_md_path --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang="$script:include_lang"
+        cloc $script:directory --json --out=$script:loc_report_json_path  --exclude-lang=$script:exclude_lang --exclude-dir=$script:exclude_dir --include-lang="$script:include_lang"
     }
  
     $Content=Get-Content -path $loc_report_md_path -Raw
