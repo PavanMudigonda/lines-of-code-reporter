@@ -11,7 +11,7 @@ Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 Here's a quick example of how to use this action in your own GitHub Workflows.
 
-Using Programming Language name (include_lang)
+Using Programming Language name (include_lang and exclude_lang)
 
 ```yaml
 jobs:
@@ -40,7 +40,7 @@ jobs:
                     
 ```
 
-Using File Extention (include_ext)
+Using File Extention (include_ext and exclude_ext)
 
 ```yaml
 jobs:
@@ -53,9 +53,9 @@ jobs:
         uses: PavanMudigonda/lines-of-code-reporter@v1.5
         with:
           directory: src
-          include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
+          include_ext: "ts,js"                      #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
-          include_ext: "c,ps1,go,sh,ts,js"          #Optional # Comma Seperated
+          include_ext: "ps1,go,sh"                  #Optional # Comma Seperated
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
@@ -80,10 +80,15 @@ This Action defines the following formal inputs.
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run using a Check Run. 
 |**`exclude_dir`**  | false | directories that need to be excluded, comma seperated, example ".github,node_modules,.gitignore".Directories named .bzr, .cvs, .hg, .git, .svn, and .snapshot are always excluded. Also please note all files in .gitignore are excluded by default. Please see Note below the table.
 |**`exclude_lang`**  | false | languages types that need to be excluded, comma seperated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript". Please see alternative filter "include_ext" based on file extension.
+|**`exclude_ext`**  | false | extension types that need to be excluded, comma seperated, Scroll to "Extensions Supported" section, example "js,ps1,ts". Please see alternative filter "include_ext" based on file extension.
 |**`include_lang`**  | false | languages types that need to be included, comma seperated. Scroll to "Languages Supported" section. example "JavaScript,PowerShell,TypeScript"
 |**`include_ext`**  | false | extention types that need to be included, comma seperated. Scroll to "Extensions Supported" section. example "c,sh,ts,js". See alternative filter "include_lang"
 
-Note:- This Action will invoke 'git ls-files' to get a file list and 'git submodule status' to get a list of submodules whose contents will be ignored.  See also --git which accepts git commit hashes and branch names.  The primary benefit is this action then skip files explicitly excluded by git, ie, those in .gitignore.
+Note:- 
+1) This Action will invoke 'git ls-files' to get a file list and 'git submodule status' to get a list of submodules whose contents will be ignored.  See also --git which accepts git commit hashes and branch names.  The primary benefit is this action then skip files explicitly excluded by git, ie, those in .gitignore.
+2) Please don't use include_lang and include_ext together. This will fail. use only one option.
+3) Please don't use exclude_lang and exclude_ext together. This will fail. use only one option.
+
 
 ### Outputs
 
@@ -114,7 +119,7 @@ This Action is implemented as a [PowerShell GitHub Action](https://github.com/eb
 
 </pre>
 
-# Recognized Languages and Corresponding File Extensions.
+### Recognized Languages and Corresponding File Extensions.
 
 <pre>
 
