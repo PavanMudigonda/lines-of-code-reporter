@@ -11,6 +11,8 @@ Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 Here's a quick example of how to use this action in your own GitHub Workflows.
 
+Using Programming Language name (include_lang)
+
 ```yaml
 jobs:
   test:
@@ -25,6 +27,34 @@ jobs:
           include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
           exclude_lang: "PowerShell,Shell,Go"       #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
+
+      # Publish Lines of Code Summary  # Optional
+     - name: Add Lines of Code Summary
+       run: echo "${{ steps.loc.outputs.lines-of-code-summary }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: print output # Optional
+        shell: pwsh
+        run: | 
+          Write-Host 'Total Lines of Code...:  ${{ steps.loc.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.loc.outputs.loc_report }}' 
+                    
+```
+
+Using File Extention (include_ext)
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Calculate Lines of Code
+        id: loc
+        uses: PavanMudigonda/lines-of-code-reporter@v1.5
+        with:
+          directory: src
+          include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
+          exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
           include_ext: "c,ps1,go,sh,ts,js"          #Optional # Comma Seperated
 
       # Publish Lines of Code Summary  # Optional
@@ -34,11 +64,10 @@ jobs:
       - name: print output # Optional
         shell: pwsh
         run: | 
-          Write-Host 'Total Lines of Code...:  ${{ steps.lines-of-code-reporter.outputs.total_lines }}'
-          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.lines-of-code-reporter.outputs.loc_report }}' 
+          Write-Host 'Total Lines of Code...:  ${{ steps.loc.outputs.total_lines }}'
+          Write-Host 'Lines of Code Markdown Report Path...:  ${{ steps.loc.outputs.loc_report }}' 
                     
 ```
-
 
 ### Inputs
 
