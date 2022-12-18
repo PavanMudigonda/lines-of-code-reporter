@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-      - name: use this action, with existing test results
+      - name: Calculate Lines of Code
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.4
         with:
