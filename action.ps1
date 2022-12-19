@@ -205,7 +205,8 @@ function Publish-ToCheckRun {
     param(
         [string]$reportData,
         [string]$reportName,
-        [string]$reportTitle
+        [string]$reportTitle,
+        [string]$lines
     )
 
 #     if ($env:GITHUB_EVENT_NAME -eq "workflow_dispatch") {
@@ -247,7 +248,7 @@ function Publish-ToCheckRun {
             status     = 'completed'
             conclusion = 'success'
             output     = @{
-                title   = $reportTitle
+                title   = "$lines Lines of Code"
                 summary = "This run completed at ``$([datetime]::Now)``"
                 text    = $reportData
             }
@@ -279,7 +280,7 @@ if ($inputs.skip_check_run -ne $true)
 
         Set-Variable -Name "loc_report_name" -Value "Lines of Code $total_lines_string"
         
-        Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title
+        Publish-ToCheckRun -ReportData $locData -ReportName $loc_report_name -ReportTitle $report_title -lines $total_lines_string
     }
 else
     {
