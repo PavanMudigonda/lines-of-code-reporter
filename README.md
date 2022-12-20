@@ -75,7 +75,7 @@ This Action defines the following formal inputs.
 
 | Name | Reqquired | Description
 |-|-|-|
-|**`directory`**  | false | Directory where lines of code needs to be calculated. Defaults to ${{ github.workspace }}
+|**`directory`**  | false | Directory(or Directories) under which lines of code needs to be calculated. Defaults to ${{ github.workspace }}. This is comma seperated. examples: "./src/module, ./test/module, ./utils"
 |**`github_token`** | false | Defaults to default token ${{ secrets.GITHUB_TOKEN }}. Personal Access Token(PAT) needs to be given in place, if your repo is a fork of another repo.
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run as Check Run. 
 |**`exclude_dir`**  | false | directories that need to be excluded, comma seperated, example ".github,node_modules,.gitignore".Directories named .bzr, .cvs, .hg, .git, .svn, and .snapshot are always excluded. Also please note all files in .gitignore are excluded by default. Please see Note below the table.
