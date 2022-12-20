@@ -42,7 +42,7 @@ Write-ActionInfo $test_results_dir
 $script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
 $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
-$script:directory =  $inputs.directory
+$script:directory =  (removeSpace $inputs.directory) -join " "
 $script:exclude_dir = (removeSpace $inputs.exclude_dir) -join ","
 $script:exclude_lang = (removeSpace $inputs.exclude_lang) -join ","
 $script:include_lang = (removeSpace $inputs.include_lang) -join ","
@@ -51,7 +51,7 @@ $script:exclude_ext = (removeSpace $inputs.exclude_ext) -join ","
 
 function Build-Report 
 {
-    $script:directory = $inputs.directory
+    $script:directory =  (removeSpace $inputs.directory) -join " "
     $script:exclude_dir = (removeSpace $inputs.exclude_dir) -join ","
     $script:exclude_lang = (removeSpace $inputs.exclude_lang) -join ","
     $script:include_lang = (removeSpace $inputs.include_lang) -join ","
