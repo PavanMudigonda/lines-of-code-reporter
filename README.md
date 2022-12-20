@@ -55,7 +55,7 @@ jobs:
           directory: src
           include_ext: "ts,js"                      #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
-          include_ext: "ps1,go,sh"                  #Optional # Comma Seperated
+          exclude_ext: "ps1,go,sh"                  #Optional # Comma Seperated
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
