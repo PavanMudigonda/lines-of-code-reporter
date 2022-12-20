@@ -73,11 +73,11 @@ jobs:
 
 This Action defines the following formal inputs.
 
-| Name | Req | Description
+| Name | Reqquired | Description
 |-|-|-|
 |**`directory`**  | false | Directory where lines of code needs to be calculated. Defaults to ${{ github.workspace }}
-|**`github_token`** | false | Input the GITHUB TOKEN Or Personal Access Token you would like to use. Recommended to use GitHub auto generated token ${{ secrets.GITHUB_TOKEN }}
-|**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run using a Check Run. 
+|**`github_token`** | false | Defaults to default token ${{ secrets.GITHUB_TOKEN }}. Personal Access Token(PAT) needs to be given in place, if your repo is a fork of another repo.
+|**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run as Check Run. 
 |**`exclude_dir`**  | false | directories that need to be excluded, comma seperated, example ".github,node_modules,.gitignore".Directories named .bzr, .cvs, .hg, .git, .svn, and .snapshot are always excluded. Also please note all files in .gitignore are excluded by default. Please see Note below the table.
 |**`exclude_lang`**  | false | languages types that need to be excluded, comma seperated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript". Please see alternative filter "include_ext" based on file extension.
 |**`exclude_ext`**  | false | extension types that need to be excluded, comma seperated, Scroll to "Extensions Supported" section, example "js,ps1,ts". Please see alternative filter "include_ext" based on file extension.
@@ -85,7 +85,7 @@ This Action defines the following formal inputs.
 |**`include_ext`**  | false | extention types that need to be included, comma seperated. Scroll to "Extensions Supported" section. example "c,sh,ts,js". See alternative filter "include_lang"
 
 Note:- 
-1) This Action will invoke 'git ls-files' to get a file list and 'git submodule status' to get a list of submodules whose contents will be ignored.  See also --git which accepts git commit hashes and branch names.  The primary benefit is this action then skip files explicitly excluded by git, ie, those in .gitignore.
+1) This action will skip files explicitly excluded by git, ie, those in .gitignore.
 2) Please don't use include_lang and include_ext together. This will fail. use only one option.
 3) Please don't use exclude_lang and exclude_ext together. This will fail. use only one option.
 
