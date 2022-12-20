@@ -14,7 +14,7 @@ inputs:
 
   directory:
     description: |
-      Path to the Directory where Calculation needs to run. 
+      Path to the Directory(s) where Calculation below which calculation needs to run.
       Defaults to github workspace.
       Comma separated allowed currently. 
     required: false
