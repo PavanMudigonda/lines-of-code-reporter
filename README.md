@@ -23,7 +23,7 @@ jobs:
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.5
         with:
-          directory: src
+          directory: "src,test,utils"
           include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
           exclude_lang: "PowerShell,Shell,Go"       #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
@@ -52,7 +52,7 @@ jobs:
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.5
         with:
-          directory: src
+          directory: "./src/module, ./test/module, ./utils"
           include_ext: "ts,js"                      #Optional # Comma Seperated
           exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
           exclude_ext: "ps1,go,sh"                  #Optional # Comma Seperated
