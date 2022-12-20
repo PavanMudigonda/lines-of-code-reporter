@@ -1,4 +1,4 @@
-# Lines of Code Reporter
+# LOC - Lines of Code Reporter
 
 Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 
