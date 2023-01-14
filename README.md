@@ -3,6 +3,9 @@
 Calculates and publishes lines of code report in GitHub Actions as Checksuite.
 
 ### Note:- The scope of this project is limited to Calculating lines of code and publishing report.
+ * I wrote this action as opensource during my vacation time.
+ * This actions is used by hundreds of repos in my organization and many other prviate org repos.
+ 
 ###  If you like my Github Action, please **STAR ⭐** it.
 
 ## Samples
