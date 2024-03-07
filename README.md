@@ -25,7 +25,7 @@ jobs:
     
       - name: Calculate Lines of Code
         id: loc
-        uses: PavanMudigonda/lines-of-code-reporter@v1.5   
+        uses: PavanMudigonda/lines-of-code-reporter@v1.6
         with:
           directory: "src,test,utils"               #Optional #Comma Seperated
           include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
@@ -54,7 +54,7 @@ jobs:
     
       - name: Calculate Lines of Code
         id: loc
-        uses: PavanMudigonda/lines-of-code-reporter@v1.5
+        uses: PavanMudigonda/lines-of-code-reporter@v1.6
         with:
           directory: "./src/module, ./test/module, ./utils" #Optional #Comma Seperated
           include_ext: "ts,js"                      #Optional # Comma Seperated
