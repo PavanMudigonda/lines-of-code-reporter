@@ -33,7 +33,7 @@ $inputs = @{
     include_ext       = Get-ActionInput include_ext    
 }
 
-function removeSpace {$args[0] -split ',' | % { $_.Trim() } }
+function Split-CommaSeparatedInput { @($args[0] -split ',' | % { $_.Trim() } | ? { $_ -ne "" }) }
 
 $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
@@ -42,21 +42,21 @@ Write-ActionInfo $test_results_dir
 $script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
 $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
-$script:directory =  (removeSpace $inputs.directory) -join " "
-$script:exclude_dir = (removeSpace $inputs.exclude_dir) -join ","
-$script:exclude_lang = (removeSpace $inputs.exclude_lang) -join ","
-$script:include_lang = (removeSpace $inputs.include_lang) -join ","
-$script:include_ext = (removeSpace $inputs.include_ext) -join ","
-$script:exclude_ext = (removeSpace $inputs.exclude_ext) -join ","
+$script:directory = Split-CommaSeparatedInput $inputs.directory
+$script:exclude_dir = (Split-CommaSeparatedInput $inputs.exclude_dir) -join ","
+$script:exclude_lang = (Split-CommaSeparatedInput $inputs.exclude_lang) -join ","
+$script:include_lang = (Split-CommaSeparatedInput $inputs.include_lang) -join ","
+$script:include_ext = (Split-CommaSeparatedInput $inputs.include_ext) -join ","
+$script:exclude_ext = (Split-CommaSeparatedInput $inputs.exclude_ext) -join ","
 
 function Build-Report 
 {
-    $script:directory =  (removeSpace $inputs.directory) -join " "
-    $script:exclude_dir = (removeSpace $inputs.exclude_dir) -join ","
-    $script:exclude_lang = (removeSpace $inputs.exclude_lang) -join ","
-    $script:include_lang = (removeSpace $inputs.include_lang) -join ","
-    $script:include_ext = (removeSpace $inputs.include_ext) -join ","
-    $script:exclude_ext = (removeSpace $inputs.exclude_ext) -join ","
+    $script:directory = Split-CommaSeparatedInput $inputs.directory
+    $script:exclude_dir = (Split-CommaSeparatedInput $inputs.exclude_dir) -join ","
+    $script:exclude_lang = (Split-CommaSeparatedInput $inputs.exclude_lang) -join ","
+    $script:include_lang = (Split-CommaSeparatedInput $inputs.include_lang) -join ","
+    $script:include_ext = (Split-CommaSeparatedInput $inputs.include_ext) -join ","
+    $script:exclude_ext = (Split-CommaSeparatedInput $inputs.exclude_ext) -join ","
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
     Write-ActionInfo $script:include_lang
@@ -73,8 +73,8 @@ function Build-Report
         Write-Output "Condition 1.1"        
             Write-ActionInfo "Include lang is null" -Foreground Yellow
             Write-ActionInfo "Include ext is null" -Foreground Yellow
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir"
         }
          # Condition 1.2
         if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
@@ -82,8 +82,8 @@ function Build-Report
         Write-Output "Condition 1.2"        
             Write-ActionInfo "Include lang is null" -Foreground Yellow
             Write-ActionInfo "Include ext is null" -Foreground Yellow
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir"
         } 
          # Condition 1.3
         if(($script:exclude_lang -eq "") -and ($script:exclude_ext -eq ""))
@@ -91,8 +91,8 @@ function Build-Report
         Write-Output "Condition 1.3"        
             Write-ActionInfo "Include lang is null" -Foreground Yellow
             Write-ActionInfo "Include ext is null" -Foreground Yellow
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir"
         }         
     }
     #Condition #2
@@ -107,8 +107,8 @@ function Build-Report
             Write-ActionInfo "Include ext is null" -Foreground Yellow
             Write-ActionInfo "Exclude lang is null" -Foreground Yellow
             Write-ActionInfo "Exclude ext is null" -Foreground Yellow            
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
         }
          # Condition 2.2
         if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
@@ -118,8 +118,8 @@ function Build-Report
             Write-ActionInfo "Include ext is null" -Foreground Yellow
             Write-ActionInfo "Exclude lang not null" -Foreground Green
             Write-ActionInfo "Exclude ext is null" -Foreground Yellow            
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path  --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
         }
          # Condition 2.3
         if(($script:exclude_lang -ne "") -and ($script:exclude_ext -eq ""))
@@ -129,8 +129,8 @@ function Build-Report
             Write-ActionInfo "Include ext is null" -Foreground Yellow
             Write-ActionInfo "Exclude lang is not null" -Foreground Green
             Write-ActionInfo "Exclude ext is null" -Foreground Yellow
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-lang="$script:include_lang"        
         }        
     }
     # Condition# 3
@@ -143,8 +143,8 @@ function Build-Report
         Write-Output "Condition 3.1"        
             Write-ActionInfo "Include lang is null" -Foreground Yellow
             Write-ActionInfo "Include ext is not null" -Foreground Green
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path  --exclude-lang="$script:exclude_lang" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
         }
          # Condition 3.2
         if(($script:exclude_lang -eq "") -and ($script:exclude_ext -ne ""))
@@ -152,8 +152,8 @@ function Build-Report
         Write-Output "Condition 3.2"        
             Write-ActionInfo "Exclude lang is null" -Foreground Yellow
             Write-ActionInfo "Exclude ext is not null" -Foreground Green
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path  --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path  --exclude-ext="$script:exclude_ext" --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
 
         }
          # Condition 3.3
@@ -162,8 +162,8 @@ function Build-Report
             Write-ActionInfo "Condition 3.3"
             Write-ActionInfo "Exclude lang is null" -Foreground Yellow
             Write-Output "Exclude ext is null" -Foreground Yellow
-            cloc "$script:directory" --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
-            cloc "$script:directory" --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --md --out=$script:loc_report_md_path --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
+            cloc $script:directory --git --json --out=$script:loc_report_json_path --exclude-dir="$script:exclude_dir" --include-ext="$script:include_ext"
         }
     }
     # Condition# 4

@@ -16,7 +16,7 @@ jobs:
 
       - name: use this action, with existing test results
         id: loc
-        uses: PavanMudigonda/lines-of-code-reporter@v1.5
+        uses: PavanMudigonda/lines-of-code-reporter@v1.8
         with:
           directory: ./
           github_token: ${{ secrets.GITHUB_TOKEN }}
