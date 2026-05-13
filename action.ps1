@@ -33,7 +33,7 @@ $inputs = @{
     include_ext       = Get-ActionInput include_ext    
 }
 
-function Parse-CommaSeparatedInput { @($args[0] -split ',' | % { $_.Trim() } | ? { $_ -ne "" }) }
+function Split-CommaSeparatedInput { @($args[0] -split ',' | % { $_.Trim() } | ? { $_ -ne "" }) }
 
 $test_results_dir = Join-Path $PWD _TMP
 Write-ActionInfo "Creating test results space"
@@ -42,21 +42,21 @@ Write-ActionInfo $test_results_dir
 $script:loc_report_md_path = Join-Path $test_results_dir loc-results.md
 $script:loc_report_json_path = Join-Path $test_results_dir loc-results.json
 $script:skip_check_run = $inputs.skip_check_run
-$script:directory = Parse-CommaSeparatedInput $inputs.directory
-$script:exclude_dir = (Parse-CommaSeparatedInput $inputs.exclude_dir) -join ","
-$script:exclude_lang = (Parse-CommaSeparatedInput $inputs.exclude_lang) -join ","
-$script:include_lang = (Parse-CommaSeparatedInput $inputs.include_lang) -join ","
-$script:include_ext = (Parse-CommaSeparatedInput $inputs.include_ext) -join ","
-$script:exclude_ext = (Parse-CommaSeparatedInput $inputs.exclude_ext) -join ","
+$script:directory = Split-CommaSeparatedInput $inputs.directory
+$script:exclude_dir = (Split-CommaSeparatedInput $inputs.exclude_dir) -join ","
+$script:exclude_lang = (Split-CommaSeparatedInput $inputs.exclude_lang) -join ","
+$script:include_lang = (Split-CommaSeparatedInput $inputs.include_lang) -join ","
+$script:include_ext = (Split-CommaSeparatedInput $inputs.include_ext) -join ","
+$script:exclude_ext = (Split-CommaSeparatedInput $inputs.exclude_ext) -join ","
 
 function Build-Report 
 {
-    $script:directory = Parse-CommaSeparatedInput $inputs.directory
-    $script:exclude_dir = (Parse-CommaSeparatedInput $inputs.exclude_dir) -join ","
-    $script:exclude_lang = (Parse-CommaSeparatedInput $inputs.exclude_lang) -join ","
-    $script:include_lang = (Parse-CommaSeparatedInput $inputs.include_lang) -join ","
-    $script:include_ext = (Parse-CommaSeparatedInput $inputs.include_ext) -join ","
-    $script:exclude_ext = (Parse-CommaSeparatedInput $inputs.exclude_ext) -join ","
+    $script:directory = Split-CommaSeparatedInput $inputs.directory
+    $script:exclude_dir = (Split-CommaSeparatedInput $inputs.exclude_dir) -join ","
+    $script:exclude_lang = (Split-CommaSeparatedInput $inputs.exclude_lang) -join ","
+    $script:include_lang = (Split-CommaSeparatedInput $inputs.include_lang) -join ","
+    $script:include_ext = (Split-CommaSeparatedInput $inputs.include_ext) -join ","
+    $script:exclude_ext = (Split-CommaSeparatedInput $inputs.exclude_ext) -join ","
     Write-ActionInfo "Running CLOC Command Line Tool to generate lines of code Markdown"
     npm install -g cloc
     Write-ActionInfo $script:include_lang
