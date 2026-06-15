@@ -27,10 +27,10 @@ jobs:
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.8
         with:
-          directory: "src,test,utils"               #Optional #Comma Seperated
-          include_lang: "JavaScript,TypeScript"     #Optional # Comma Seperated
-          exclude_lang: "PowerShell,Shell,Go"       #Optional # Comma Seperated
-          exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
+          directory: "src,test,utils"               #Optional #Comma Separated
+          include_lang: "JavaScript,TypeScript"     #Optional # Comma Separated
+          exclude_lang: "PowerShell,Shell,Go"       #Optional # Comma Separated
+          exclude_dir: "node_modules,.github"       #Optional # Comma Separated
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
@@ -44,7 +44,7 @@ jobs:
                     
 ```
 
-Using File Extention (include_ext and exclude_ext)
+Using File Extension (include_ext and exclude_ext)
 
 ```yaml
 jobs:
@@ -56,10 +56,10 @@ jobs:
         id: loc
         uses: PavanMudigonda/lines-of-code-reporter@v1.8
         with:
-          directory: "./src/module, ./test/module, ./utils" #Optional #Comma Seperated
-          include_ext: "ts,js"                      #Optional # Comma Seperated
-          exclude_dir: "node_modules,.github"       #Optional # Comma Seperated
-          exclude_ext: "ps1,go,sh"                  #Optional # Comma Seperated
+          directory: "./src/module, ./test/module, ./utils" #Optional #Comma Separated
+          include_ext: "ts,js"                      #Optional # Comma Separated
+          exclude_dir: "node_modules,.github"       #Optional # Comma Separated
+          exclude_ext: "ps1,go,sh"                  #Optional # Comma Separated
 
       # Publish Lines of Code Summary  # Optional
      - name: Add Lines of Code Summary
@@ -77,16 +77,16 @@ jobs:
 
 This Action defines the following formal inputs.
 
-| Name | Reqquired | Description
+| Name | Required | Description
 |-|-|-|
-|**`directory`**  | false | Directory(or Directories) under which lines of code needs to be calculated. Defaults to ${{ github.workspace }}. This is comma seperated. examples: "./src/module, ./test/module, ./utils"
+|**`directory`**  | false | Directory(or Directories) under which lines of code needs to be calculated. Defaults to ${{ github.workspace }}. This is comma separated. examples: "./src/module, ./test/module, ./utils"
 |**`github_token`** | false | Defaults to default token ${{ secrets.GITHUB_TOKEN }}. Personal Access Token(PAT) needs to be given in place, if your repo is a fork of another repo.
 |**`skip_check_run`** | false | If true, will skip attaching the Coverage Result report to the Workflow Run as Check Run. 
-|**`exclude_dir`**  | false | directories that need to be excluded, comma seperated, example ".github,node_modules,.gitignore".Directories named .bzr, .cvs, .hg, .git, .svn, and .snapshot are always excluded. Also please note all files in .gitignore are excluded by default. Please see Note below the table.
-|**`exclude_lang`**  | false | languages types that need to be excluded, comma seperated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript". Please see alternative filter "include_ext" based on file extension.
-|**`exclude_ext`**  | false | extension types that need to be excluded, comma seperated, Scroll to "Extensions Supported" section, example "js,ps1,ts". Please see alternative filter "include_ext" based on file extension.
-|**`include_lang`**  | false | languages types that need to be included, comma seperated. Scroll to "Languages Supported" section. example "JavaScript,PowerShell,TypeScript"
-|**`include_ext`**  | false | extention types that need to be included, comma seperated. Scroll to "Extensions Supported" section. example "c,sh,ts,js". See alternative filter "include_lang"
+|**`exclude_dir`**  | false | directories that need to be excluded, comma separated, example ".github,node_modules,.gitignore".Directories named .bzr, .cvs, .hg, .git, .svn, and .snapshot are always excluded. Also please note all files in .gitignore are excluded by default. Please see Note below the table.
+|**`exclude_lang`**  | false | languages types that need to be excluded, comma separated, Scroll to "Languages Supported" section, example "JavaScript,PowerShell,TypeScript". Please see alternative filter "include_ext" based on file extension.
+|**`exclude_ext`**  | false | extension types that need to be excluded, comma separated, Scroll to "Extensions Supported" section, example "js,ps1,ts". Please see alternative filter "include_ext" based on file extension.
+|**`include_lang`**  | false | languages types that need to be included, comma separated. Scroll to "Languages Supported" section. example "JavaScript,PowerShell,TypeScript"
+|**`include_ext`**  | false | extension types that need to be included, comma separated. Scroll to "Extensions Supported" section. example "c,sh,ts,js". See alternative filter "include_lang"
 
 Note:- 
 1) This action will skip files explicitly excluded by git, ie, those in .gitignore.
